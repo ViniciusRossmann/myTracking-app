@@ -90,6 +90,16 @@ async function getDeliveries(): Promise<types.Delivery[]>{
     return res.data || [];
 }
 
+async function updateDeliveryLocation(id: string, location: types.Location): Promise<boolean>{
+    const res = await post(`/delivery/${id}`, { location }, true);
+    return res.status == 200;
+}
+
+async function updateDeliveryStatus(id: string, status: number): Promise<boolean>{
+    const res = await post(`/delivery/${id}`, { status }, true);
+    return res.status == 200;
+}
+
 async function getDelivery(id: string): Promise<types.Delivery | null>{
     const res = await get(`/driver/delivery/${id}`, true);
     if (res.data.msg) return null;
@@ -101,5 +111,7 @@ export{
     login,
     logout,
     getDeliveries,
-    getDelivery
+    getDelivery,
+    updateDeliveryLocation,
+    updateDeliveryStatus
 }

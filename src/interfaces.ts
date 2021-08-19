@@ -2,9 +2,20 @@ export interface RouterProps{
     initialRoute: string;
 }
 
-export interface Position{
-    lat: number;
-    long: number;
+interface Coords{
+    accuracy: number;
+    altitude: number;
+    altitudeAccuracy: number;
+    heading: number;
+    latitude: number;
+    longitude: number;
+    speed: number;
+}
+
+export interface Location{
+    coords: Coords;
+    mocked?: boolean,
+    timestamp: number,
 }
 
 export interface User{
@@ -19,10 +30,11 @@ export interface Delivery{
     description: string;
     user: User;
     driver: string;
-    position?: Position
+    location?: Location;
 }
 
 export interface LoginRequest{
     email: string;
     password: string;
 }
+

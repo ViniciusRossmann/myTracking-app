@@ -10,7 +10,7 @@ export default function DeliveryContainer(delivery: Delivery) {
 
     const init = async () =>{
         //@ts-ignore
-        navigation.navigate('Delivery');
+        navigation.navigate('Delivery', { delivery });
     }
 
     return(
