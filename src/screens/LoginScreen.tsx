@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, Alert, StyleSheet, Image, ScrollView, ActivityIndicator, SafeAreaView} from 'react-native';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native';
 import { TextInput } from 'react-native-paper';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
@@ -32,30 +32,6 @@ export default function LoginScreen(){
             }
             else Alert.alert("Atenção!", msg);
         });
-
-        /*await Requests.driverLogin(username, password, async (status, token)=>{
-            if(token==null||token==""){
-                Alert.alert("Atenção!", status);
-                setLoading(false);
-            }
-            else{
-                //save login information
-                try{
-                    await AsyncStorage.setItem('@myTracking:user', username);
-                    await AsyncStorage.setItem('@myTracking:password', password);
-                    await AsyncStorage.setItem('@myTracking:token', token);
-                }
-                catch (error) {
-                    console.log(error);
-                }
-                finally{
-                    setLoading(false);
-                }
-                console.log("logado com sucesso");
-                //navigate to home screen
-                navigation.navigate('Logado', { screen: 'Home' });
-            }
-        });*/
     }
 
     return (

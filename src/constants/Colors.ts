@@ -4,4 +4,5 @@ export default {
     colorStatusBar: '#44475a',
     colorPrimary: '#ff5555',
     corIconNav: '#f8f8f2',
+    colorGreen: '#50fa7b'
 };

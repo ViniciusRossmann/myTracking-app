@@ -7,11 +7,17 @@ export interface Position{
     long: number;
 }
 
+export interface User{
+    _id: string;
+    name: string;
+    email: string;
+}
+
 export interface Delivery{
     _id: string;
     status: number;
     description: string;
-    user: string;
+    user: User;
     driver: string;
     position?: Position
 }
