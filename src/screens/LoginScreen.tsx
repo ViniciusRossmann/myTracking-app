@@ -43,7 +43,7 @@ export default function LoginScreen(){
                     <Image resizeMode="contain" source={require('../../assets/logo_login.png')} style={style.logo}/>
                 </View>
                 <TextInput theme={inputTheme} underlineColor={Colors.colorText} selectionColor={Colors.colorPrimary} value={username} style={style.input} label="Usuário" onChangeText={username => setUsername(username)}/>
-                <View style={style.separator}></View>
+                <View style={style.separator}/>
                 <TextInput theme={inputTheme} underlineColor={Colors.colorText} selectionColor={Colors.colorPrimary} secureTextEntry={true} style={style.input} label="Senha" value={password} onChangeText={password => setPassword(password)}/>
                     <TouchableOpacity style={style.btLogin} onPress={enter}>
                         {loading ? 

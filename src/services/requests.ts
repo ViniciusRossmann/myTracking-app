@@ -77,7 +77,7 @@ async function login(loginReq: types.LoginRequest, callback: (status: number, ms
         }
     }
 
-    callback(res.status, res.data.error || "Erro ao tentar efetuar login.");
+    callback(res.status || 0 , res.data?.error || "Erro ao tentar efetuar login.");
 }
 
 async function logout(){
@@ -106,6 +106,11 @@ async function getDelivery(id: string): Promise<types.Delivery | null>{
     return res.data || null;
 }
 
+async function newDelivery(newDelivery: types.NewDelivery, callback: (status: number, msg: string) => void){
+    const res = await post(`/delivery`, newDelivery, true);
+    callback(res.status || 0, res.data?.msg || res.data?.error || "Erro ao tentar efetuar login.");
+}
+
 
 export{
     login,
@@ -113,5 +118,6 @@ export{
     getDeliveries,
     getDelivery,
     updateDeliveryLocation,
-    updateDeliveryStatus
+    updateDeliveryStatus,
+    newDelivery
 }

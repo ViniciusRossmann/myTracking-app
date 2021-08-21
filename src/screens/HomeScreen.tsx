@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native'
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import { Delivery } from '../interfaces';
@@ -7,12 +8,17 @@ import DeliveryContainer from '../components/DeliveryContainer';
 const requests = require('../services/requests');
 
 export default function HomeScreen() {
+    const navigation = useNavigation();
     const [items, setItems] = useState<Delivery[]>([]);
     const [refreshing, setRefreshing] = useState(true);
 
     React.useEffect(() => {
-        onRefresh();
-    }, []);
+        const unsubscribe = navigation.addListener('focus', async () => {
+            onRefresh();
+        });
+
+        return unsubscribe;
+    }, [navigation]);
 
     const onRefresh = React.useCallback(async () => {
         setRefreshing(true);
@@ -20,6 +26,11 @@ export default function HomeScreen() {
         setItems(data);
         setRefreshing(false);
     }, []);
+
+    const newDelivery = () =>{
+        //@ts-ignore
+        navigation.navigate("NewDelivery");
+    }
 
     return (
         <SafeAreaView style={style.container}>

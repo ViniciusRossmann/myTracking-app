@@ -38,3 +38,8 @@ export interface LoginRequest{
     password: string;
 }
 
+export interface NewDelivery{
+    description: string;
+    user: string;
+}
+
