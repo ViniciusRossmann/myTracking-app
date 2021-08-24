@@ -13,7 +13,7 @@ export default function LoginScreen(){
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
 
-    const enter = async () => {
+    const login = async () => {
         if((username == "")||(username==null)||(password=="")||(password==null)){
             Alert.alert("Preecha todos os campos!", "Favor preencher todos os campos para continuar.");
             return;
@@ -34,6 +34,11 @@ export default function LoginScreen(){
         });
     }
 
+    const register = () =>{
+        // @ts-ignore
+        navigation.navigate('Deslogado', { screen: 'Register' });
+    }
+
     return (
         <SafeAreaView style={style.container}>
         <ScrollView contentContainerStyle={{flexGrow: 1}}>
@@ -45,12 +50,21 @@ export default function LoginScreen(){
                 <TextInput theme={inputTheme} underlineColor={Colors.colorText} selectionColor={Colors.colorPrimary} value={username} style={style.input} label="Usuário" onChangeText={username => setUsername(username)}/>
                 <View style={style.separator}/>
                 <TextInput theme={inputTheme} underlineColor={Colors.colorText} selectionColor={Colors.colorPrimary} secureTextEntry={true} style={style.input} label="Senha" value={password} onChangeText={password => setPassword(password)}/>
-                    <TouchableOpacity style={style.btLogin} onPress={enter}>
-                        {loading ? 
-                            (<ActivityIndicator size="large" color="#FFF" />) : 
-                            (<Text style={style.txtLogin}>Login</Text>)
-                        }
-                    </TouchableOpacity>
+                
+                <View style={style.separator}/>
+                <Text style={style.txtCad}>
+                    Não é cadastrado? 
+                    <Text style={style.txtRed} onPress={register}>
+                        Cadastre-se.
+                    </Text>
+                </Text>
+                
+                <TouchableOpacity style={style.btLogin} onPress={login}>
+                    {loading ? 
+                        (<ActivityIndicator size="large" color="#FFF" />) : 
+                        (<Text style={style.txtLogin}>Login</Text>)
+                    }
+                </TouchableOpacity>
             </View>
         </View>
         </ScrollView>
@@ -88,16 +102,15 @@ const style = StyleSheet.create({
     },
     txtCad:{
         textAlign: "center",
-        fontSize: 18,
+        fontSize: 16,
         color: Colors.colorText,
-        marginTop: 20,
-        marginBottom: 40,
+        marginTop: 5,
     },
     btLogin:{
         backgroundColor: Colors.colorPrimary,
         width: width,
         height: 45,
-        marginTop: 40,
+        marginTop: 25,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -110,4 +123,7 @@ const style = StyleSheet.create({
         fontSize: 18,
         color: Colors.colorText,
     },
+    txtRed:{
+        color: Colors.colorPrimary,
+    }
 });

@@ -86,7 +86,7 @@ async function logout(){
 
 async function getDeliveries(): Promise<types.Delivery[]>{
     const res = await get('/driver/deliveries', true);
-    if (res.data.msg) return [];
+    if (res.data?.msg) return [];
     return res.data || [];
 }
 
@@ -102,7 +102,7 @@ async function updateDeliveryStatus(id: string, status: number): Promise<boolean
 
 async function getDelivery(id: string): Promise<types.Delivery | null>{
     const res = await get(`/driver/delivery/${id}`, true);
-    if (res.data.msg) return null;
+    if (res.data?.msg) return null;
     return res.data || null;
 }
 
@@ -111,6 +111,11 @@ async function newDelivery(newDelivery: types.NewDelivery, callback: (status: nu
     callback(res.status || 0, res.data?.msg || res.data?.error || "Erro ao tentar efetuar login.");
 }
 
+async function getUsers(): Promise<types.Delivery[]>{
+    const res = await get('/users', true);
+    if (res.data?.msg) return [];
+    return res.data || [];
+}
 
 export{
     login,
@@ -119,5 +124,6 @@ export{
     getDelivery,
     updateDeliveryLocation,
     updateDeliveryStatus,
-    newDelivery
+    newDelivery,
+    getUsers
 }

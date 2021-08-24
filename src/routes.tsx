@@ -15,12 +15,12 @@ import HomeScreen from './screens/HomeScreen';
 import LogoffScreen from './screens/LogoffScreen';
 import DeliveryScreen from './screens/DeliveryScreen';
 import NewDeliveryScreen from './screens/NewDeliveryScreen';
-
+import SelectUserScreen from './screens/SelectUserScreen';
+import RegisterScreen from './screens/RegisterScreen';
 
 const StackHome = createStackNavigator();
 function StackNavHome() {
     const navigation = useNavigation();
-
     return (
         <StackHome.Navigator initialRouteName="Home" screenOptions={{ headerStyle: { backgroundColor: Colors.colorStatusBar }, headerTintColor: Colors.colorText }}>
             <StackHome.Screen name="Inicio" component={HomeScreen}
@@ -45,6 +45,7 @@ function StackNavHome() {
             }} />
             <StackHome.Screen name="Delivery" options={{headerTitle: "Viagem"}} component={DeliveryScreen} />
             <StackHome.Screen name="NewDelivery" options={{headerTitle: "Nova Viagem"}} component={NewDeliveryScreen} />
+            <StackHome.Screen name="SelectUser" options={{headerTitle: "Selecionar cliente"}} component={SelectUserScreen} />
         </StackHome.Navigator>
     );
 }
@@ -59,12 +60,23 @@ function drawerNav() {
     )
 }
 
+const StackUnlogged = createStackNavigator();
+function NavigationUnlogged(props: RouterProps) {
+    return (
+        <StackUnlogged.Navigator initialRouteName={props.initialRoute} screenOptions={{ headerStyle: { backgroundColor: Colors.colorStatusBar }, headerTintColor: Colors.colorText }}>
+            <StackUnlogged.Screen name="Login" options={{headerShown: false}} component={LoginScreen} />
+            <StackUnlogged.Screen name="Register" options={{headerTitle: 'Cadastro'}} component={RegisterScreen} />
+        </StackUnlogged.Navigator>
+    );
+}
+
+
 const Stack = createStackNavigator();
 export default function Navigation(props: RouterProps) {
     return (
         <NavigationContainer>
             <Stack.Navigator initialRouteName={props.initialRoute} screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Deslogado" component={LoginScreen} />
+                <Stack.Screen name="Deslogado" component={NavigationUnlogged} />
                 <Stack.Screen name="Logado" component={drawerNav} />
             </Stack.Navigator>
         </NavigationContainer>

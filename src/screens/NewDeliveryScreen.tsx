@@ -2,19 +2,34 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
-import { useNavigation } from '@react-navigation/native'
 import { TextInput } from 'react-native-paper';
 import * as types from '../interfaces';
+import { StackScreenProps } from '@react-navigation/stack';
 import { Delivery } from '../interfaces';
 const requests = require('../services/requests');
 
-export default function NewDeliveryScreen() {
-    const navigation = useNavigation();
+type Params = {
+    user?: types.User;
+}
+type RootStackParamList = {
+    params: Params;
+};
+type Props = StackScreenProps<RootStackParamList>;
+
+export default function NewDeliveryScreen({ route, navigation }: Props) {
     const [loading, setLoading] = useState<boolean>(false);
+    const [userName, setUserName] = useState<string>('');
     const [delivery, setDelivery] = useState<types.NewDelivery>({
         description: '',
         user: ''
     });
+
+    React.useEffect(() => {
+        if (route.params?.user) {
+          setUserName(route.params.user.name);
+          setDelivery({ user: route.params.user._id, description: delivery.description });
+        }
+    }, [route.params?.user]);
 
     const createDelivery = async () =>{
         setLoading(true);
@@ -28,13 +43,45 @@ export default function NewDeliveryScreen() {
         });
     }
 
+    const selectUser= () => {
+        //@ts-ignore
+        navigation.navigate('SelectUser');
+    }
+
     return (
         <SafeAreaView style={style.container}>
             <ScrollView horizontal={true} contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <TextInput theme={inputTheme} underlineColor={Colors.colorText} selectionColor={Colors.colorPrimary} value={delivery.description} style={style.input} label="Descrição" onChangeText={description => setDelivery({ description, user: delivery.user })} />
+                    
+                    <View style={style.header}>
+                        <Text style={style.txtHeader}>
+                            Cadastrar nova viagem:
+                        </Text>
+                    </View>
+
                     <View style={style.separator} />
-                    <TextInput theme={inputTheme} underlineColor={Colors.colorText} selectionColor={Colors.colorPrimary} value={delivery.user} style={style.input} label="Cliente" onChangeText={user => setDelivery({ user, description: delivery.description })} />
+
+                    <TextInput 
+                        theme={inputTheme} 
+                        underlineColor={Colors.colorText} 
+                        selectionColor={Colors.colorPrimary} 
+                        value={delivery.description} 
+                        style={style.input} 
+                        label="Descrição" 
+                        onChangeText={description => setDelivery({ description, user: delivery.user })} 
+                    />
+                    
+                    <View style={style.separator} />
+
+                    <TextInput 
+                        theme={inputTheme} 
+                        underlineColor={Colors.colorText} 
+                        selectionColor={Colors.colorPrimary} 
+                        value={userName} 
+                        style={style.input}
+                        label="Cliente" 
+                        onFocus={selectUser}
+                    />
 
                     <TouchableOpacity style={style.btLogin} onPress={createDelivery}>
                         {loading ?
@@ -42,6 +89,7 @@ export default function NewDeliveryScreen() {
                             (<Text style={style.txtLogin}>Cadastrar</Text>)
                         }
                     </TouchableOpacity>
+
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -81,4 +129,11 @@ const style = StyleSheet.create({
         fontSize: 18,
         color: Colors.colorText,
     },
+    txtHeader:{
+        fontSize: 18,
+        color: Colors.colorText,
+    },
+    header: {
+        width: width,
+    }
 });

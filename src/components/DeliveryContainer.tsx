@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Delivery } from '../interfaces';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
+import Layout from '../constants/Layout';
 import { useNavigation } from '@react-navigation/native'
 
 export default function DeliveryContainer(delivery: Delivery) {
@@ -36,7 +37,8 @@ const descStatus: {[key: number]: string} = {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.colorStatusBar,
-        marginTop: 10
+        marginVertical: 10,
+        width: Layout.window.width * 0.9,
     },
     txtInit: {
         color: Colors.colorText,
