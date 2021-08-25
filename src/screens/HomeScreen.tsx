@@ -36,6 +36,7 @@ export default function HomeScreen() {
         <SafeAreaView style={style.container}>
             <ScrollView  horizontal={true} contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    { items.length ? (
                     <FlatList
                         refreshControl={
                             <RefreshControl
@@ -45,10 +46,18 @@ export default function HomeScreen() {
                         }
                         data={items}
                         renderItem={({ item }) =>
-                            <DeliveryContainer {...item}/>
+                            <DeliveryContainer delivery={item} onRefresh={onRefresh}/>
                         }
                         keyExtractor={item => item._id}
                     />
+                    ) : (
+                        <View style={style.vwCenter}>
+                            <Text style={style.txtEmpty}>Nenhuma viagem cadastrada</Text>
+                            <TouchableOpacity style={style.btCad} onPress={newDelivery}>
+                                <Text style={style.txtCad}>Adicionar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -66,5 +75,26 @@ const style = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.colorBackground //3579b7
+    },
+    txtEmpty:{
+        color: Colors.colorText,
+        fontSize: 18
+    },
+    btCad:{
+        backgroundColor: Colors.colorPrimary,
+        height: 45,
+        marginTop: 40,
+        paddingHorizontal: 20,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    txtCad:{
+        textAlign: "center",
+        fontSize: 18,
+        color: Colors.colorText,
+    },
+    vwCenter:{
+        justifyContent: 'center', 
+        alignItems: 'center'
     }
 });

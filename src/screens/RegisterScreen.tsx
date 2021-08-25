@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import { View, TouchableOpacity, Text, Alert, StyleSheet, Image, ScrollView, ActivityIndicator, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TextInput } from 'react-native-paper';
@@ -9,12 +9,61 @@ const requests = require('../services/requests');
 
 export default function RegisterScreen() {
     const navigation = useNavigation();
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const [passwordRepeat, setPasswordRepeat] = useState<string>('');
+    const [formData, setFormData] = useState<types.Driver>({
+        email: '',
+        name: '',
+        password: ''
+    });
 
     const register = async () => {
+        if (!validateData()) return;
+        setLoading(true);
+        requests.newDriver(formData, (status: number, msg: string)=>{
+            if (status == 201){ //created
+                requests.login({email: formData.email, password: formData.password}, (status: number, msg: string)=>{
+                    setLoading(false);
+                    if(status==200){
+                        // @ts-ignore
+                        navigation.navigate('Logado', { screen: 'Home' });
+                    }
+                    else Alert.alert("Atenção", msg);
+                });
+            }
+            else {
+                setLoading(false);
+                Alert.alert("Atenção", msg);
+            }
+        });
+    }
 
+    const validateData = (): boolean =>{
+        if (formData.password !== passwordRepeat){
+            Alert.alert("Atenção", "As senhas informadas não conferem!");
+            return false;
+        }
+        if (formData.name==="" || formData.email==="" || formData.password===""){
+            Alert.alert("Atenção", "Preencha todos os campos!");
+            return false;
+        }
+        if (!validateEmail(formData.email)){
+            Alert.alert("Atenção", "Informe um endereço de email válido!");
+            return false;
+        }
+        return true;
+    }
+
+    const validateEmail = (email: string): boolean => {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+
+    const handleInputChange = (name: string, value: string) => {
+        setFormData({
+            ...formData,
+            [name]: value
+        })
     }
 
     return (
@@ -28,20 +77,56 @@ export default function RegisterScreen() {
                                 Cadastrar novo motorista:
                             </Text>
                         </View>
-                        <View style={style.separator} />
-                        <TextInput theme={inputTheme} underlineColor={Colors.colorText} selectionColor={Colors.colorPrimary} value={username} style={style.input} label="Nome" onChangeText={username => setUsername(username)} />
-                        <View style={style.separator} />
-                        <TextInput theme={inputTheme} underlineColor={Colors.colorText} selectionColor={Colors.colorPrimary} value={username} style={style.input} label="Email" onChangeText={username => setUsername(username)} />
-                        <View style={style.separator} />
-                        <TextInput theme={inputTheme} underlineColor={Colors.colorText} selectionColor={Colors.colorPrimary} secureTextEntry={true} style={style.input} label="Senha" value={password} onChangeText={password => setPassword(password)} />
-                        <View style={style.separator} />
-                        <TextInput theme={inputTheme} underlineColor={Colors.colorText} selectionColor={Colors.colorPrimary} secureTextEntry={true} style={style.input} label="Repetir Senha" value={password} onChangeText={password => setPassword(password)} />
+
+                        <TextInput 
+                            theme={inputTheme} 
+                            underlineColor={Colors.colorText} 
+                            selectionColor={Colors.colorPrimary} 
+                            value={formData.name} 
+                            style={style.input} 
+                            label="Nome" 
+                            onChangeText={name => handleInputChange('name', name)} 
+                        />
+
+                        <TextInput 
+                            theme={inputTheme} 
+                            underlineColor={Colors.colorText} 
+                            selectionColor={Colors.colorPrimary} 
+                            value={formData.email} 
+                            style={style.input} 
+                            label="Email" 
+                            onChangeText={email => handleInputChange('email', email)} 
+                        />
+
+                        <TextInput 
+                            theme={inputTheme} 
+                            underlineColor={Colors.colorText} 
+                            selectionColor={Colors.colorPrimary} 
+                            secureTextEntry={true} 
+                            style={style.input} 
+                            label="Senha" 
+                            value={formData.password} 
+                            onChangeText={password => handleInputChange('password', password)} 
+                        />
+
+                        <TextInput 
+                            theme={inputTheme} 
+                            underlineColor={Colors.colorText} 
+                            selectionColor={Colors.colorPrimary} 
+                            secureTextEntry={true} 
+                            style={style.input} 
+                            label="Repetir Senha" 
+                            value={passwordRepeat} 
+                            onChangeText={passwordRepeat => setPasswordRepeat(passwordRepeat)} 
+                        />
+                        
                         <TouchableOpacity style={style.btLogin} onPress={register}>
                             {loading ?
                                 (<ActivityIndicator size="large" color="#FFF" />) :
                                 (<Text style={style.txtLogin}>Confirmar</Text>)
                             }
                         </TouchableOpacity>
+
                     </View>
                 </View>
             </ScrollView>
@@ -76,6 +161,7 @@ const style = StyleSheet.create({
         width: width, //280
         height: 55,
         fontSize: 18,
+        marginTop: 20
     },
     txtCad: {
         textAlign: "center",
@@ -91,10 +177,6 @@ const style = StyleSheet.create({
         marginTop: 40,
         justifyContent: 'center',
         alignItems: 'center'
-    },
-    logo: {
-        width: width - 60,
-        //height: 130
     },
     txtLogin: {
         textAlign: "center",

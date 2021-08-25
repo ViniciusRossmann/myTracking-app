@@ -9,7 +9,7 @@ import { RouterProps } from './interfaces';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
-
+import {navigationRef} from './helpers/RootNavigation';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import LogoffScreen from './screens/LogoffScreen';
@@ -74,7 +74,8 @@ function NavigationUnlogged(props: RouterProps) {
 const Stack = createStackNavigator();
 export default function Navigation(props: RouterProps) {
     return (
-        <NavigationContainer>
+        //@ts-ignore
+        <NavigationContainer ref={navigationRef}>
             <Stack.Navigator initialRouteName={props.initialRoute} screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Deslogado" component={NavigationUnlogged} />
                 <Stack.Screen name="Logado" component={drawerNav} />

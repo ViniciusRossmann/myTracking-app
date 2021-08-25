@@ -1,6 +1,7 @@
 import api from './api';
 import * as types from '../interfaces';
 import { Alert } from 'react-native';
+import * as RootNavigation from '../helpers/RootNavigation';
 import { AxiosResponse } from 'axios';
 import { AsyncStorage } from 'react-native';
 
@@ -26,7 +27,7 @@ async function getHeaders(withAuth: boolean){
 
 async function verifyAuthentication(res: AxiosResponse){
     if (res.status == 401){ //unauthorized
-        exit();
+        await exit();
         return;
     }
 
@@ -36,8 +37,18 @@ async function verifyAuthentication(res: AxiosResponse){
     }
 }
 
-function exit() {
-    Alert.alert("Erro de autenticação!", "Favor fazer login novamente.");
+async function exit() {
+    try {
+        await AsyncStorage.removeItem('@myTracking:loggedin');
+        await AsyncStorage.removeItem('@myTracking:x-access-token');
+        await AsyncStorage.removeItem('@myTracking:x-refresh-token');
+        await AsyncStorage.removeItem('@myTracking:user-name');
+    } catch (e){
+        throw new Error(e);
+    } finally{
+        Alert.alert("Erro de autenticação!", "Favor fazer login novamente.");
+        RootNavigation.navigate('Deslogado', {screen: "Login"});
+    }
 }
 
 async function post(route: string, data: Object, withAuth: boolean): Promise<AxiosResponse> {
@@ -117,6 +128,11 @@ async function getUsers(): Promise<types.Delivery[]>{
     return res.data || [];
 }
 
+async function newDriver(driver: types.Driver, callback: (status: number, msg: string) => void){
+    const res = await post('/driver/register', driver, false);
+    callback(res.status || 0 , res.data?.error || "Erro ao tentar efetuar cadastro.");
+}
+
 export{
     login,
     logout,
@@ -125,5 +141,6 @@ export{
     updateDeliveryLocation,
     updateDeliveryStatus,
     newDelivery,
-    getUsers
+    getUsers,
+    newDriver
 }

@@ -19,7 +19,7 @@ export default function SairScreen() {
                 throw new Error(e);
             } finally{
                 // @ts-ignore
-                navigation.navigate("Deslogado");
+                navigation.navigate("Deslogado", {screen: "Login"});
             }
         });
 

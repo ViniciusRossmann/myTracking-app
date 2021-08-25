@@ -83,10 +83,10 @@ export default function NewDeliveryScreen({ route, navigation }: Props) {
                         onFocus={selectUser}
                     />
 
-                    <TouchableOpacity style={style.btLogin} onPress={createDelivery}>
+                    <TouchableOpacity style={style.btCad} onPress={createDelivery}>
                         {loading ?
                             (<ActivityIndicator size="large" color="#FFF" />) :
-                            (<Text style={style.txtLogin}>Cadastrar</Text>)
+                            (<Text style={style.txtCad}>Cadastrar</Text>)
                         }
                     </TouchableOpacity>
 
@@ -116,7 +116,7 @@ const style = StyleSheet.create({
     separator: {
         height: 20
     },
-    btLogin:{
+    btCad:{
         backgroundColor: Colors.colorPrimary,
         width: width,
         height: 45,
@@ -124,7 +124,7 @@ const style = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    txtLogin:{
+    txtCad:{
         textAlign: "center",
         fontSize: 18,
         color: Colors.colorText,

@@ -7,9 +7,7 @@ import * as types from '../interfaces';
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 import MapView, {
-    Callout,
     Marker,
-    PROVIDER_GOOGLE,
     Region,
 } from "react-native-maps";
 
@@ -26,7 +24,7 @@ type Props = StackScreenProps<RootStackParamList>;
 
 export default function DeliveryScreen({ route, navigation }: Props) {
     const [delivery, setDelivery] = useState<types.Delivery>(route.params.delivery);
-    const [region, setRegion] = useState<Region>();
+    const [region, setRegion] = useState<Region | null>(null);
 
     React.useEffect(() => {
         TaskManager.defineTask(TASK_FETCH_LOCATION, async ({ data, error }) => {
@@ -41,7 +39,7 @@ export default function DeliveryScreen({ route, navigation }: Props) {
                     await requests.updateDeliveryLocation(delivery._id, location);
                     let latitude = location.coords.latitude;
                     let longitude = location.coords.longitude;
-                    setRegion({ latitude, longitude, latitudeDelta: 100, longitudeDelta: 100 });
+                    setRegion({ latitude, longitude, latitudeDelta: 0.01, longitudeDelta: 0.01 });
                 }
             } catch (err) {
                 console.error(err);
@@ -49,6 +47,7 @@ export default function DeliveryScreen({ route, navigation }: Props) {
         });
 
         async function asyncTasks() {
+            // verify/request permissions
             let statusForeground = (await Location.requestForegroundPermissionsAsync()).status;
             let statusBackground = (await Location.requestBackgroundPermissionsAsync()).status;
             if (statusForeground !== 'granted' || statusBackground !== 'granted') {
@@ -56,6 +55,7 @@ export default function DeliveryScreen({ route, navigation }: Props) {
                 //@ts-ignore
                 return navigation.navigate('Inicio');
             }
+            //verify location service is running
             if (! await Location.hasServicesEnabledAsync()) {
                 Alert.alert("Atenção!", "É preciso ativar o serviço de localização do dispositivo para continuar!");
                 //@ts-ignore
@@ -65,6 +65,15 @@ export default function DeliveryScreen({ route, navigation }: Props) {
             //change status to 'Em andamento'
             if (delivery.status != 1) {
                 await requests.updateDeliveryStatus(delivery._id, 1);
+            }
+
+            //update with last known position
+            const lastPosition = await Location.getLastKnownPositionAsync({});
+            if (lastPosition) {
+                await requests.updateDeliveryLocation(delivery._id, lastPosition);
+                let latitude = lastPosition.coords.latitude;
+                let longitude = lastPosition.coords.longitude;
+                setRegion({ latitude, longitude, latitudeDelta: 0.01, longitudeDelta: 0.01 });
             }
 
             //start location update
@@ -142,29 +151,33 @@ export default function DeliveryScreen({ route, navigation }: Props) {
         <SafeAreaView style={style.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <View>
-
-                        <MapView style={style.map} region={region}>
-
-                            <Marker
-                                key={delivery._id}
-                                //image={{ uri: "" }}
-                                calloutAnchor={{
-                                    x: 2.9,
-                                    y: 0.8,
-                                }}
-                                coordinate={{
-                                    latitude: region?.latitude || 0,
-                                    longitude: region?.longitude || 0,
-                                }}
-                            />
-
-                        </MapView>
-
-                        <TouchableOpacity style={style.btEnd} onPress={askEndDelivery}>
-                            <Text style={style.txtEnd}>Finalizar</Text>
-                        </TouchableOpacity>
-                    </View>
+                    {region ? (
+                        <View>
+                            <MapView style={style.map} region={region}>
+                                <Marker
+                                    key={delivery._id}
+                                    calloutAnchor={{
+                                        x: 2.9,
+                                        y: 0.8,
+                                    }}
+                                    coordinate={{
+                                        latitude: region.latitude,
+                                        longitude: region.longitude
+                                    }}
+                                >
+                                    <View style={style.marker} />
+                                </Marker>
+                            </MapView>
+                            <TouchableOpacity style={style.btEnd} onPress={askEndDelivery}>
+                                <Text style={style.txtEnd}>Finalizar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    ) : (
+                        <View>
+                            <ActivityIndicator size='large' color={Colors.colorPrimary} />
+                            <Text style={style.txtEnd}>Aguarde...</Text>
+                        </View>
+                    )}
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -187,11 +200,18 @@ const style = StyleSheet.create({
         paddingVertical: 10,
         position: 'absolute',
         top: 20,
-        //alignSelf: 'center'
         right: 20,
     },
     txtEnd: {
         color: Colors.colorText,
         fontSize: 18
+    },
+    marker: {
+        backgroundColor: '#4e73df',
+        width: 10,
+        height: 10,
+        borderRadius: 10,
+        borderColor: 'blue',
+        borderWidth: 1
     }
 });

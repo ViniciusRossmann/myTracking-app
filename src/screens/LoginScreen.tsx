@@ -55,7 +55,7 @@ export default function LoginScreen(){
                 <Text style={style.txtCad}>
                     Não é cadastrado? 
                     <Text style={style.txtRed} onPress={register}>
-                        Cadastre-se.
+                        &nbsp;Cadastre-se.
                     </Text>
                 </Text>
                 
