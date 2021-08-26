@@ -36,7 +36,7 @@ export default function HomeScreen() {
         <SafeAreaView style={style.container}>
             <ScrollView  horizontal={true} contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    { items.length ? (
+                    { items.length || refreshing ? (
                     <FlatList
                         refreshControl={
                             <RefreshControl
