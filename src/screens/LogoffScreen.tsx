@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Text, ActivityIndicator, AsyncStorage } from 'react-native';
+import { View, Text, ActivityIndicator, AsyncStorage, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native'
 import Colors from '../constants/Colors';
 const requests = require('../services/requests');
 
-export default function SairScreen() {
-    const navigation = useNavigation();
+export default function LogoffScreen() {
+    const navigation: any = useNavigation();
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
@@ -18,7 +18,6 @@ export default function SairScreen() {
             } catch (e){
                 throw new Error(e);
             } finally{
-                // @ts-ignore
                 navigation.navigate("Deslogado", {screen: "Login"});
             }
         });
@@ -27,9 +26,22 @@ export default function SairScreen() {
     }, [navigation]);
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.colorBackground }}>
-            <Text style={{ color: Colors.colorText, fontSize: 25 }}>Saindo</Text>
+        <View style={style.container}>
+            <Text style={style.text}>Saindo</Text>
             <ActivityIndicator size="large" color={Colors.colorPrimary} />
         </View>
     );
 }
+
+const style = StyleSheet.create({
+    container: {
+        flex: 1, 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        backgroundColor: Colors.colorBackground
+    },
+    text: {
+        color: Colors.colorText, 
+        fontSize: 25
+    }
+});

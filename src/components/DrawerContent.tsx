@@ -8,7 +8,7 @@ import Layout from '../constants/Layout';
 import Constants from "expo-constants";
 
 export default function CustomDrawerContent() {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const [username, setUsername] = useState<string>('Username');
 
     async function retrieveData() {
@@ -16,30 +16,26 @@ export default function CustomDrawerContent() {
             const name = await AsyncStorage.getItem('@myTracking:user-name');
             setUsername(name || 'Username');
         } catch (error) {
-            console.log("erro ao ler");
+            console.error(error);
         }
     };
     retrieveData();
 
     return (
-        <ScrollView
-            style={styles.fundoDrawer}
-        >
+        <ScrollView style={styles.backgroundDrawer}>
             <View style={styles.headerDrawer}>
                 <Text style={{ fontSize: 20, color: Colors.colorText, marginTop: 25 }}>{username}</Text>
             </View>
-            <View style={styles.fundoDrawerOptions}>
+            <View style={styles.backgroundOptions}>
 
                 <TouchableOpacity style={styles.itemDrawer} onPress={() => {
-                    // @ts-ignore
-                    navigation.navigate("Home")
+                    navigation.navigate("Home");
                 }}>
                     <Ionicons name="home" size={25} color={Colors.corIconNav} />
                     <Text style={styles.labelDrawer}>Início</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.itemDrawer} onPress={() => {
-                    // @ts-ignore
-                    navigation.navigate("Sair")
+                    navigation.navigate("Sair");
                 }}>
                     <Ionicons name="md-exit" size={25} color={Colors.corIconNav} />
                     <Text style={styles.labelDrawer}>Sair</Text>
@@ -49,12 +45,8 @@ export default function CustomDrawerContent() {
     );
 }
 
-//estilos dos elementos
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    fundoDrawer: {
+    backgroundDrawer: {
         flex: 1,
         backgroundColor: Colors.colorBackground,
     },
@@ -62,7 +54,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.colorStatusBar,
         height: 100,
         padding: 10,
-        //alignItems: 'center',
         justifyContent: 'center',
     },
     itemDrawer: {
@@ -78,9 +69,8 @@ const styles = StyleSheet.create({
         color: Colors.corIconNav,
         fontSize: 18,
     },
-
-    fundoDrawerOptions: {
+    backgroundOptions: {
         backgroundColor: Colors.colorBackground,
-        height: (Layout.window.height - (120 + Constants.statusBarHeight)), //120
+        height: (Layout.window.height - (120 + Constants.statusBarHeight)),
     }
 });

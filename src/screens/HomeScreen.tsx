@@ -8,7 +8,7 @@ import DeliveryContainer from '../components/DeliveryContainer';
 const requests = require('../services/requests');
 
 export default function HomeScreen() {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const [items, setItems] = useState<Delivery[]>([]);
     const [refreshing, setRefreshing] = useState(true);
 
@@ -27,29 +27,28 @@ export default function HomeScreen() {
         setRefreshing(false);
     }, []);
 
-    const newDelivery = () =>{
-        //@ts-ignore
+    const newDelivery = () => {
         navigation.navigate("NewDelivery");
     }
 
     return (
         <SafeAreaView style={style.container}>
-            <ScrollView  horizontal={true} contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView horizontal={true} contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    { items.length || refreshing ? (
-                    <FlatList
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={refreshing}
-                                onRefresh={onRefresh}
-                            />
-                        }
-                        data={items}
-                        renderItem={({ item }) =>
-                            <DeliveryContainer delivery={item} onRefresh={onRefresh}/>
-                        }
-                        keyExtractor={item => item._id}
-                    />
+                    {items.length || refreshing ? (
+                        <FlatList
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={onRefresh}
+                                />
+                            }
+                            data={items}
+                            renderItem={({ item }) =>
+                                <DeliveryContainer delivery={item} onRefresh={onRefresh} />
+                            }
+                            keyExtractor={item => item._id}
+                        />
                     ) : (
                         <View style={style.vwCenter}>
                             <Text style={style.txtEmpty}>Nenhuma viagem cadastrada</Text>
@@ -64,23 +63,16 @@ export default function HomeScreen() {
     );
 }
 
-//TextInput style
-const inputTheme = { colors: { placeholder: Colors.colorText, text: Colors.colorText, primary: Colors.colorText, background: Colors.colorBackground } };
-
-//elements width
-const width = Layout.window.width * 0.8;
-
-//stylesheet
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.colorBackground //3579b7
+        backgroundColor: Colors.colorBackground
     },
-    txtEmpty:{
+    txtEmpty: {
         color: Colors.colorText,
         fontSize: 18
     },
-    btCad:{
+    btCad: {
         backgroundColor: Colors.colorPrimary,
         height: 45,
         marginTop: 40,
@@ -88,13 +80,13 @@ const style = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    txtCad:{
+    txtCad: {
         textAlign: "center",
         fontSize: 18,
         color: Colors.colorText,
     },
-    vwCenter:{
-        justifyContent: 'center', 
+    vwCenter: {
+        justifyContent: 'center',
         alignItems: 'center'
     }
 });

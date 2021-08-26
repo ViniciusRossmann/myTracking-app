@@ -6,10 +6,10 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import CustomDrawerContent from './components/DrawerContent';
 import Colors from './constants/Colors';
 import { RouterProps } from './interfaces';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, DrawerActions } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
-import {navigationRef} from './helpers/RootNavigation';
+import { navigationRef } from './helpers/RootNavigation';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import LogoffScreen from './screens/LogoffScreen';
@@ -20,22 +20,20 @@ import RegisterScreen from './screens/RegisterScreen';
 
 const StackHome = createStackNavigator();
 function StackNavHome() {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     return (
         <StackHome.Navigator initialRouteName="Home" screenOptions={{ headerStyle: { backgroundColor: Colors.colorStatusBar }, headerTintColor: Colors.colorText }}>
             <StackHome.Screen name="Inicio" component={HomeScreen}
             options={{
                 headerTitle: 'Suas viagens', 
                 headerLeft: () => (
-                    //@ts-ignore
-                    <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>
+                    <TouchableWithoutFeedback onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
                         <View style={{ paddingLeft: 20, height: '100%', alignItems: 'center', justifyContent: 'center' }}>
                             <Ionicons name="md-menu" size={27} color={Colors.colorText} />
                         </View>
                     </TouchableWithoutFeedback>
                 ),
                 headerRight: () => (
-                    //@ts-ignore
                     <TouchableWithoutFeedback onPress={() => navigation.navigate('NewDelivery')}>
                         <View style={{ paddingRight: 20, height: '100%', alignItems: 'center', justifyContent: 'center' }}>
                             <Ionicons name="add" size={27} color={Colors.colorText} />

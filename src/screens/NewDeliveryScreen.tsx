@@ -5,7 +5,6 @@ import Layout from '../constants/Layout';
 import { TextInput } from 'react-native-paper';
 import * as types from '../interfaces';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Delivery } from '../interfaces';
 const requests = require('../services/requests');
 
 type Params = {

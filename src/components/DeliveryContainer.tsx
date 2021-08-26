@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Delivery } from '../interfaces';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,10 +13,9 @@ type DeliveryContainerProps = {
 }
 
 export default function DeliveryContainer(props: DeliveryContainerProps) {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
 
     const init = async () => {
-        //@ts-ignore
         navigation.navigate('Delivery', { delivery: props.delivery });
     }
 
@@ -90,7 +89,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: Colors.colorGreen,
         paddingHorizontal: 3
-        //backgroundColor: Colors.colorBackground
     },
     btCanc: {
         flexDirection: 'row',

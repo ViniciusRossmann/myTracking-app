@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, Alert, StyleSheet, Image, ScrollView, ActivityIndicator, SafeAreaView } from 'react-native';
+import { View, TouchableOpacity, Text, Alert, StyleSheet, ScrollView, ActivityIndicator, SafeAreaView } from 'react-native';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -27,6 +27,7 @@ export default function DeliveryScreen({ route, navigation }: Props) {
     const [region, setRegion] = useState<Region | null>(null);
 
     React.useEffect(() => {
+        //update location task
         TaskManager.defineTask(TASK_FETCH_LOCATION, async ({ data, error }) => {
             if (error) {
                 console.error(error);
@@ -184,7 +185,6 @@ export default function DeliveryScreen({ route, navigation }: Props) {
     );
 }
 
-//stylesheet
 const style = StyleSheet.create({
     container: {
         flex: 1,

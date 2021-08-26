@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FlatList, StyleSheet, Text, View, RefreshControl, SafeAreaView, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native'
@@ -10,7 +10,7 @@ import { User } from '../interfaces';
 const requests = require('../services/requests');
 
 export default function SelectUser() {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const [fullData, setFullData] = useState<User[]>([]);
     const [data, setData] = useState<User[]>(fullData);
     const [search, setSearch] = useState<string>('');
@@ -26,7 +26,6 @@ export default function SelectUser() {
     }
 
     const select = (item: User) => {
-        //@ts-ignore
         navigation.navigate('NewDelivery', { user: item })
     }
 
@@ -105,15 +104,6 @@ const style = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.colorBackground
     },
-    header: {
-        backgroundColor: "#6272a4",
-        marginHorizontal: 10,
-        marginBottom: 10,
-        marginTop: 10,
-        flexDirection: "row",
-        borderColor: Colors.colorText,
-        borderWidth: 1,
-    },
     txtIndex: {
         fontSize: 15,
         marginHorizontal: 10,
@@ -137,5 +127,5 @@ const style = StyleSheet.create({
         fontSize: 18,
         marginTop: 5,
         marginBottom: 10
-    },
+    }
 });

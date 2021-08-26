@@ -1,5 +1,5 @@
-import React, { useState, ChangeEvent } from 'react';
-import { View, TouchableOpacity, Text, Alert, StyleSheet, Image, ScrollView, ActivityIndicator, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity, Text, Alert, StyleSheet, ScrollView, ActivityIndicator, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TextInput } from 'react-native-paper';
 import Colors from '../constants/Colors';
@@ -8,7 +8,7 @@ import * as types from '../interfaces';
 const requests = require('../services/requests');
 
 export default function RegisterScreen() {
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
     const [loading, setLoading] = useState<boolean>(false);
     const [passwordRepeat, setPasswordRepeat] = useState<string>('');
     const [formData, setFormData] = useState<types.Driver>({
@@ -25,7 +25,6 @@ export default function RegisterScreen() {
                 requests.login({email: formData.email, password: formData.password}, (status: number, msg: string)=>{
                     setLoading(false);
                     if(status==200){
-                        // @ts-ignore
                         navigation.navigate('Logado', { screen: 'Home' });
                     }
                     else Alert.alert("Atenção", msg);
@@ -120,10 +119,10 @@ export default function RegisterScreen() {
                             onChangeText={passwordRepeat => setPasswordRepeat(passwordRepeat)} 
                         />
                         
-                        <TouchableOpacity style={style.btLogin} onPress={register}>
+                        <TouchableOpacity style={style.btCad} onPress={register}>
                             {loading ?
                                 (<ActivityIndicator size="large" color="#FFF" />) :
-                                (<Text style={style.txtLogin}>Confirmar</Text>)
+                                (<Text style={style.txtCad}>Confirmar</Text>)
                             }
                         </TouchableOpacity>
 
@@ -142,20 +141,9 @@ const width = Layout.window.width * 0.8;
 
 //stylesheet
 const style = StyleSheet.create({
-    separator: {
-        height: 20
-    },
     container: {
         flex: 1,
         backgroundColor: Colors.colorBackground //3579b7
-    },
-    center: {
-        alignItems: 'center'
-    },
-    mainView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
     },
     input: {
         width: width, //280
@@ -163,14 +151,7 @@ const style = StyleSheet.create({
         fontSize: 18,
         marginTop: 20
     },
-    txtCad: {
-        textAlign: "center",
-        fontSize: 18,
-        color: Colors.colorText,
-        marginTop: 20,
-        marginBottom: 40,
-    },
-    btLogin: {
+    btCad: {
         backgroundColor: Colors.colorPrimary,
         width: width,
         height: 45,
@@ -178,7 +159,7 @@ const style = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    txtLogin: {
+    txtCad: {
         textAlign: "center",
         fontSize: 18,
         color: Colors.colorText,

@@ -4,11 +4,11 @@
     "slug": "myTracking",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo_my_tracking.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#282A36"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -20,10 +20,7 @@
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+      "package": "com.viniciusnunes.myTracking"
     },
     "web": {
       "favicon": "./assets/favicon.png"
