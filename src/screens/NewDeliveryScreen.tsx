@@ -34,10 +34,12 @@ export default function NewDeliveryScreen({ route, navigation }: Props) {
         setLoading(true);
         await requests.newDelivery(delivery, (status: number, msg: string)=>{
             setLoading(false);
-            Alert.alert("Atenção", msg);
             if (status==201) {
                 //@ts-ignore
                 navigation.navigate('Inicio');
+            }
+            else {
+                Alert.alert("Atenção", msg);
             }
         });
     }

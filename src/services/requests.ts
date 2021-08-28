@@ -119,7 +119,7 @@ async function getDelivery(id: string): Promise<types.Delivery | null>{
 
 async function newDelivery(newDelivery: types.NewDelivery, callback: (status: number, msg: string) => void){
     const res = await post(`/delivery`, newDelivery, true);
-    callback(res.status || 0, res.data?.msg || res.data?.error || "Erro ao tentar efetuar login.");
+    callback(res.status || 0, res.data?.msg || res.data?.error || "Erro ao tentar cadastrar viagem.");
 }
 
 async function getUsers(): Promise<types.Delivery[]>{
