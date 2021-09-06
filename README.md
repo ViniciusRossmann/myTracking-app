@@ -1,6 +1,6 @@
 # myTracking-app
 
-Aplicativo do projeto [myTracking](https://github.com/ViniciusRossmann/myTracking). Onde Os entregadores podem se cadastrar, fazer login, cadastrar entregas e efetuar seu rastreamento.
+Aplicativo do projeto [myTracking](https://github.com/ViniciusRossmann/myTracking). Onde os entregadores podem se cadastrar, fazer login, cadastrar entregas e efetuar seu rastreamento.
 
 # Tecnologias
 
