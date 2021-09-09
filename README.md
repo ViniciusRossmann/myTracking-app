@@ -17,6 +17,10 @@ Instalação dos módulos necessários:
 yarn install
 ```
 
+Configuração:
+
+No arquivo [./src/services/api.ts](https://github.com/ViniciusRossmann/myTracking-app/blob/main/src/services/api.ts), o valor de 'baseURL' deve ser atualizado para url em que esta rodando o [servidor do aplicativo](https://github.com/ViniciusRossmann/myTracking).
+
 Execução:
 
 ```bash
